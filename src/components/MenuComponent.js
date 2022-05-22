@@ -1,29 +1,62 @@
 import React, { useState } from "react";
-import { Card } from "react-bootstrap";
-import data from "../data/dishes.json";
+import {Card, NavbarBrand} from 'react-bootstrap';
 
+export default function MenuComponent({dishes}){
+    const [selectedDish,setSelectedDish]=useState(null);
 
+    function onSelect(dish){
+        setSelectedDish(dish);
+    }
 
-export default function MenuComponent(){
-    const [dishes,setDishes] = useState(data);
+    function onSelectDish(dish){
+        if (dish!=null){
+            return (
+                <>
+                <div className="col-12 col-md-5 m-1">
+                <Card>
+                    <Card.Img variant="top" src={dish.image} />
+                    <Card.Body>
+                        <Card.Title>{dish.name}</Card.Title>
+                        <Card.Text> {dish.description}</Card.Text>
+                    </Card.Body>
+                </Card>
+                </div>
+                <div className="col-12 col-md-5 m-1">
+                <h4>Comments</h4>
+                {dish.comments.map((comments)=>(
+                    <div key={comments.id}>
+                        <p>{comments.comment}</p>
+                        <p>--{comments.author} {comments.date}</p>
+                    </div>
+                ))}
+                </div>
+                </>
+                
+            )
+        }else{
+            return(
+            <div></div>
+            )
+        }
+    }
     return(
         <div className="container">
-            <div className="row mt-5">
+            <div className="row mt-5" >
                 
                 {dishes.map((dish)=>(
-                    <div className="col-12 m-3">
-                    <div class="d-flex align-items-center" key={dish.id}>
-                        <div class="flex-shrink-0">
-                            <img src={dish.image} alt={dish.name}/>
-                        </div>
-                        <div class="flex-grow-1 ms-3">
-                            <h3>{dish.name}</h3>
-                            <p>{dish.description}</p>
-                        </div>
-                    </div>
+                    <div key={dish.id} className="col-12 col-md-5 m-1" onClick={() => onSelect(dish)}>
+                        <Card className="bg-dark">
+                            <Card.Img src={dish.image} alt="Card image" />
+                            <Card.ImgOverlay>
+                                <Card.Title>{dish.name}</Card.Title>
+                            </Card.ImgOverlay>
+                            </Card>
                     </div>
                     ))}
                 
+            </div>
+            <div className="row mt-1">
+                {onSelectDish(selectedDish)}
             </div>
         </div>
     );

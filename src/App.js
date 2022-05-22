@@ -1,21 +1,16 @@
-import {Navbar, NavbarBrand} from 'react-bootstrap';
-import logo from './logo.svg';
+import React from 'react';
 import './App.css';
-import MenuComponent from './components/MenuComponent';
+import Main from './components/MainComponent';
+import { BrowserRouter as Router } from "react-router-dom";
 
 function App() {
   return (
-    <>
-    <div className="App">
-      <Navbar bg="primary" variant="dark">
-        <div className="container">
-          <NavbarBrand href="/">Ristorante con Fusion</NavbarBrand>
-        </div>
-      </Navbar>
-      
+    <Router>
+      <div>
+      <Main />
     </div>
-    <MenuComponent/>
-    </>
+    </Router>      
+
   );
 }
 
