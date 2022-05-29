@@ -1,5 +1,7 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { Card, CardImg} from 'react-bootstrap';
+
+import { useSelector } from 'react-redux';
 
 function RenderCard({item}) {
 
@@ -16,18 +18,31 @@ function RenderCard({item}) {
 
 }
 
-function Home(props) {
+function Home() {
+
+    const AllLeaders = useSelector((state) => state.leaders);
+    const AllDishes = useSelector((state) => state.dishes);
+    const AllPromotions = useSelector((state) => state.promotions);
+
+    const [leaders,setLeaders]=useState(AllLeaders);
+    const [dishes,setDishes]=useState(AllDishes);
+    const [promotions,setPromotions]=useState(AllPromotions);
+
+    const dishFeatured= dishes.filter((dish)=> dish.featured )[0];
+    const promotionFeatured= promotions.filter((promotion)=> promotion.featured )[0];
+    const leaderFeatured= leaders.filter((leader)=> leader.featured )[0];
+
     return(
         <div className="container">
             <div className="row align-items-start">
                 <div className="col-12 col-md m-1">
-                    <RenderCard item={props.dishFeatured} />
+                    <RenderCard item={dishFeatured} />
                 </div>
                 <div className="col-12 col-md m-1">
-                    <RenderCard item={props.promotionFeatured} />
+                    <RenderCard item={promotionFeatured} />
                 </div>
                 <div className="col-12 col-md m-1">
-                    <RenderCard item={props.leaderFeatured} />
+                    <RenderCard item={leaderFeatured} />
                 </div>
             </div>
         </div>

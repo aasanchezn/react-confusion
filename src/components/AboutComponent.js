@@ -1,10 +1,18 @@
-import React from 'react';
+import React,{useState} from 'react';
 import { Breadcrumb, Card } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
-function About(props) {
 
-    const leaders = props.leaders.map((leader) => {
+import { useSelector } from 'react-redux';
+
+
+
+function About() {
+
+    const AllLeaders = useSelector((state) => state.leaders);
+    const [leaders,setLeaders]=useState(AllLeaders);
+
+    const leadersUI = leaders.map((leader) => {
         return (
             <div className="d-flex align-items-center m-5">
             <div className="flex-shrink-0">
@@ -74,7 +82,7 @@ function About(props) {
                     <h2>Corporate Leadership</h2>
                 </div>
                 <div className="col-12 m-2">
-                    {leaders}
+                    {leadersUI}
                 </div>
             </div>
         </div>

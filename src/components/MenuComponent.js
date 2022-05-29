@@ -1,13 +1,19 @@
-import React from "react";
+import React,{useState} from "react";
 import {Card,Breadcrumb} from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
-export default function MenuComponent({dishes}){
+import { useSelector } from 'react-redux';
+
+export default function MenuComponent(){
+
+    const AllDishes = useSelector((state) => state.dishes);
+    const [dishes,setDishes]=useState(AllDishes);
+
  
     return(
-        <div className="container">
 
-                <div className="row">
+        <div className="container">
+            <div className="row">
                 <Breadcrumb>
                     <Breadcrumb.Item ><Link to="/home">Home</Link></Breadcrumb.Item>
                     <Breadcrumb.Item active>Menu</Breadcrumb.Item>
@@ -15,11 +21,9 @@ export default function MenuComponent({dishes}){
                 <div className="col-12">
                     <h3>Menu</h3>
                     <hr />
-                    </div>                
-                </div>
-
+                </div>                
+            </div>
             <div className="row mt-5" >
-                
                 {dishes.map((dish)=>(
                     <div key={dish.id} className="col-12 col-md-5 m-1">
                         <Link to={`/menu/${dish.id}`} >
