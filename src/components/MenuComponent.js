@@ -1,6 +1,7 @@
 import React,{useState} from "react";
 import {Card,Breadcrumb} from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import { Form, Field } from 'react-final-form';
 
 import { useSelector } from 'react-redux';
 
@@ -9,9 +10,7 @@ export default function MenuComponent(){
     const AllDishes = useSelector((state) => state.dishes);
     const [dishes,setDishes]=useState(AllDishes);
 
- 
     return(
-
         <div className="container">
             <div className="row">
                 <Breadcrumb>
@@ -23,9 +22,11 @@ export default function MenuComponent(){
                     <hr />
                 </div>                
             </div>
-            <div className="row mt-5" >
+            <div className="row mt-5" 
+            // style={{outline:'1px solid red'}}
+            >
                 {dishes.map((dish)=>(
-                    <div key={dish.id} className="col-12 col-md-5 m-1">
+                    <div key={dish.id} className="col-12 col-md-6 mb-5">
                         <Link to={`/menu/${dish.id}`} >
                         <Card className="bg-dark">
                             <Card.Img src={dish.image} alt="Card image" />
@@ -38,5 +39,5 @@ export default function MenuComponent(){
                     ))}   
             </div>
         </div>
-    );
+)
 }

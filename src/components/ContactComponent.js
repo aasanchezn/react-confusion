@@ -1,24 +1,10 @@
 import React, { useLayoutEffect } from 'react';
 import { useState } from "react";
-import {Nav,Breadcrumb,Button,Row,Col,InputGroup,Feedback} from 'react-bootstrap';
-import Form from 'react-bootstrap/Form';
-import {Link} from 'react-router-dom';
+import {Nav,Breadcrumb,Button,Row,Col,InputGroup,Feedback,Container} from 'react-bootstrap';
+import { Form, Field } from 'react-final-form';
+import { Link } from 'react-router-dom';
 
 export default function Contact(){
-
-    const DATA_FORM = [{
-        firstname: '',
-        lastname: '',
-        telnum: '',
-        email: '',
-        agree: false,
-        contactType: 'cualquier cosa',
-        message: ''
-    }];
-
- 
-
-    const [dataForm,setDataForm] = useState(DATA_FORM);
 
     const [touchfirstname,setTouchFirstName] = useState(false);
     const [touchlastname,setTouchLastName] = useState(false);
@@ -33,74 +19,35 @@ export default function Contact(){
     const [errortelnum,setErrorTN]= useState('');
     const [erroremail,setErrorEmail]= useState('');
 
-    //Controlled component functions that handle form inputs.
+    function handleSubmit(values) {
+        console.log('Current State is: ' + JSON.stringify(values));
+        alert('Current State is: ' + JSON.stringify(values));
+        // event.preventDefault();
+    }
+    const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
 
-    function handleInputChange(e){
-        // This allow identificate the input where happened onChange event
-        const target = e.target;
-        const value = target.type === 'checkbox' ? target.checked : target.value;
-        const name = target.name;
-        DATA_FORM.name=value;
-        setDataForm(DATA_FORM);
-        validate(e);
+    const onSubmit = async values => {
+    await sleep(300)
+    window.alert(JSON.stringify(values, 0, 2))
     }
 
-    useLayoutEffect(()=>{
-        console.log(dataForm.agree);
-    },[]);
-
-    function handleSubmit(e) {
-        console.log('Current State is: ' + JSON.stringify(dataForm));
-        alert('Current State is: ' + JSON.stringify(dataForm));
-        e.preventDefault();
-    }
-    function handleBlur(e){
-        const target = e.target;
-    }
-
-function validate(e) {
-    console.log(e);
-    const target= e.currentTarget;
-    if (target.name === 'firstname' || target.name === 'lastname' ){
-        if(target.value.length<3){
-            target.classList.contains("is-valid")? target.classList.replace("is-valid","is-invalid"): target.classList.add("is-invalid");;}
-        else{
-            target.classList.replace("is-invalid","is-valid")
-        }
-    }
-    if (target.name === 'email'){
-        if(target.value.split('').filter(x => x === '@').length !== 1){target.classList.add("is-invalid")}else{
-            target.classList.replace("is-invalid","is-valid")
-        }
-    }
-}
-
-    // if (dataForm.touched.firstname && firstname.length < 3)
-    //     errors.firstname = 'First Name should be >= 3 characters';
-    // else if (dataForm.touched.firstname && firstname.length > 10)
-    //     errors.firstname = 'First Name should be <= 10 characters';
-
-    // if (dataForm.touched.lastname && lastname.length < 3)
-    //     errors.lastname = 'Last Name should be >= 3 characters';
-    // else if (dataForm.touched.lastname && lastname.length > 10)
-    //     errors.lastname = 'Last Name should be <= 10 characters';
-
-    // const reg = /^\d+$/;
-    // if (dataForm.touched.telnum && !reg.test(telnum))
-    //     errors.telnum = 'Tel. Number should contain only numbers';
-
-    // if(dataForm.touched.email && email.split('').filter(x => x === '@').length !== 1)
-    //     errors.email = 'Email should contain a @';
-
-    // return errors;
+    //Validations
+    const required = value => (value ? undefined : 'Required');
+    const maxLength = (len) => (val) => !(val) || (val.length <= len);
+    const minLength = (len) => (value) => value && (value.length >= len)? undefined : `'Must be greater than 2 characters'`;
+    const mustBeNumber = value => ( isNaN(value) ? 'Must be a number' : undefined);
+    const validEmail = (value) => /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value);
+    const composeValidators = (...validators) => value =>
+    validators.reduce((error, validator) => error || validator(value), undefined);
 
 
 
     return (
+        <>
         <div className="container">
             
             <div className="row">
-            <Breadcrumb>
+                <Breadcrumb>
                     <Breadcrumb.Item> <Link to="/home">Home</Link> </Breadcrumb.Item>
                     <Breadcrumb.Item active>Contact Us</Breadcrumb.Item>
                 </Breadcrumb>
@@ -109,7 +56,8 @@ function validate(e) {
                     <hr />
                 </div>                
             </div>
-            <div className="row row-content">
+
+            <div className="row mb-3">
 
                 <div className="col-12">
                 <h3>Location Information</h3>
@@ -137,142 +85,120 @@ function validate(e) {
                 </div>
             </div>
 
-            <div className="row row-content">
+            <div className="row">
                 <div className="col-12">
                     <h3>Send us your Feedback</h3>
                 </div>
                 <div className="col-12 col-md-9">
-                    <Form  noValidate onSubmit={(e)=>handleSubmit(e)} validated={validatefirstname}>
 
-                    <Form.Group as={Row}  className="mb-3">
-                        <Form.Label column sm="2">
-                            First Name
-                        </Form.Label>
-                        <Col sm="10">
-                        <Form.Control type="text" id="firstname" name="firstname" placeholder="First Name"
-                        value={dataForm.firstname}
-                        onBlur={(e)=>handleBlur(e)}
-                        onChange={(e)=>handleInputChange(e)}
-                        />
-                        <Form.Control.Feedback type="invalid">
-                            First Name should be &gt;= 3 characters
-                        </Form.Control.Feedback>
-                        </Col>
-                        
-                    </Form.Group>
-
-                    <Form.Group as={Row} className="mb-3">
-                        <Form.Label column sm="2">
-                        Last Name
-                        </Form.Label>
-                        <Col sm="10">
-                        <Form.Control type="text" id="lastname" name="lastname" placeholder="Last Name"
-                            value={dataForm.lastname}
-                            onBlur={(e)=>handleBlur(e)}
-                            onChange={(e)=>handleInputChange(e)} 
-                        />
-                        <Form.Control.Feedback type="invalid">
-                            Last Name should be &gt;= 3 characters
-                        </Form.Control.Feedback>
-                        </Col>
-                    </Form.Group>
-
-                    <Form.Group as={Row} className="mb-3">
-                        <Form.Label column sm="2">
-                        Contact Tel
-                        </Form.Label>
-                        <Col sm="10">
-                        <Form.Control  type="tel" id="telnum" name="telnum" placeholder="Tel. number"
-                            value={dataForm.telnum}
-                            onBlur={(e)=>handleBlur(e)}
-                            onChange={(e)=>handleInputChange(e)} 
-                        />
-                        </Col>
-                    </Form.Group>
-
-
-                    <Form.Group as={Row} className="mb-3">
-                        <Form.Label column sm="2">
-                            Email
-                        </Form.Label>
-                        <Col sm="10">
-                        <Form.Control  type="email" id="email" name="email" placeholder="Email"
-                            value={dataForm.email}
-                            onBlur={(e)=>handleBlur(e)}
-                            onChange={(e)=>handleInputChange(e)} 
-                        />
-                        <Form.Control.Feedback type="invalid">
-                            Email should contain a @
-                        </Form.Control.Feedback>
-                        </Col>
-                        
-                        
-                    </Form.Group>
-
-                    <InputGroup className="mb-3">
-                    <Form.Check type="checkbox" label="May we contact you?" name="agree" className="me-3"
-                            checked={dataForm.agree}
-                            onChange={(e)=>handleInputChange(e)}
-                            />
-                    <Form.Select id="contactType"name="contactType"
-                                    value={dataForm.contactType}
-                                    onChange={(e)=>handleInputChange}
-                                    >
-                                    <option>Tel.</option>
-                                    <option>Email</option>
-                                </Form.Select>
-                        
-                    </InputGroup>
-
-                    <Form.Group className="mb-3" >
-                        <Form.Label>Your Feedback</Form.Label>
-                        <Form.Control as="textarea" rows={3} id="message" name="message"
-                         value={dataForm.message}
-                         onChange={(e)=>handleInputChange(e)}/>
-                    </Form.Group>
-
-                        <Form.Group>
-                            <Button type="submit" color="primary">
+                <Form
+                onSubmit={(values)=>handleSubmit(values)}
+                initialValues={{ stooge: 'larry', employed: false }}
+                render={({ handleSubmit, form, submitting, pristine, values }) => (
+                    <form onSubmit={handleSubmit}>
+                        <Container>
+                        <Row className="mb-3">
+                            <Col><label>First Name</label></Col>
+                            <Col md={10}>
+                                <Field
+                                name="firstname"
+                                validate={composeValidators(required,minLength(3))}>
+                                    {({ input, meta }) => (
+                                        <div>
+                                            <input {...input} type="text" placeholder="First Name" className="form-control"/>
+                                            {meta.error && meta.touched && <span className="text-danger">{meta.error}</span>}
+                                        </div>
+                                    )}
+                                </Field>
+                            </Col>
+                        </Row>
+                        <Row className="mb-3">
+                            <Col><label>Last Name</label></Col>
+                            <Col md={10}>
+                            <Field
+                                name="lastname"
+                                validate={composeValidators(required,minLength(3))}>
+                                    {({ input, meta }) => (
+                                        <div>
+                                            <input {...input} type="text" placeholder="Last Name" className="form-control"/>
+                                            {meta.error && meta.touched && <span className="text-danger">{meta.error}</span>}
+                                        </div>
+                                    )}
+                                </Field>
+                            </Col>
+                        </Row>
+                        <Row className="mb-3">
+                            <Col><label>Contact Tel.</label></Col>
+                            <Col md={10}>
+                            <Field
+                                name="telnum"
+                                validate={composeValidators(required, mustBeNumber,minLength(3))}>
+                                    {({ input, meta }) => (
+                                        <div>
+                                            <input {...input} type="text" placeholder="Tel Num." className="form-control"/>
+                                            {meta.error && meta.touched && <span className="text-danger">{meta.error}</span>}
+                                        </div>
+                                    )}
+                                </Field>
+                            </Col>
+                        </Row>
+                        <Row className="mb-3">
+                            <Col><label>Email</label></Col>
+                            <Col md={10}>
+                            <Field
+                                name="email"
+                                validate={composeValidators(required,validEmail)}>
+                                    {({ input, meta }) => (
+                                        <div>
+                                            <input {...input} type="text" placeholder="Email" className="form-control"/>
+                                            {meta.error && meta.touched && <span className="text-danger">{meta.error}</span>}
+                                        </div>
+                                    )}
+                            </Field>
+                            </Col>
+                        </Row>
+                        <Row className="mb-3">
+                            <Col xs={6}>
+                                <Field name="employed" component="input" type="checkbox" />
+                                <label>May we contact you?</label>
+                            </Col>
+                            <Col xs={6}>
+                                <Field name="contactType" component="select" className="form-select">
+                                <option value="Tel">Tel.</option>
+                                <option value="Email">Email</option>
+                                </Field>
+                            </Col>
+                        </Row>
+                        <Row className="mb-3">
+                            <Col><label>Your Feedback</label></Col>
+                            <Col md={10}>
+                            <Field
+                                name="notes"
+                                rows={10}
+                                validate={composeValidators(required,minLength(3))}>
+                                    {({ input, meta }) => (
+                                        <div>
+                                            <input {...input} type="textarea" placeholder="Notes" className="form-control" />
+                                            {meta.error && meta.touched && <span className="text-danger">{meta.error}</span>}
+                                        </div>
+                                    )}
+                                </Field>
+                            </Col>
+                        </Row>
+                    
+                    <Row className="mb-3">
+                        <Button type="submit" color="primary">
                             Send Feedback
-                            </Button>
-                        </Form.Group> 
-                    </Form>
+                        </Button>
+                    </Row>
+
+                    <pre>{JSON.stringify(values, 0, 2)}</pre>
+                    </Container>
+                    </form>
+                )}
+                />
                 </div>
             </div>
         </div>
-    )
-}
-
-
-
-// function Example() {
-//     const [show, setShow] = useState(false);
-  
-//     const handleClose = () => setShow(false);
-//     const handleShow = () => setShow(true);
-  
-//     return (
-//       <>
-//         <Button variant="primary" onClick={handleShow}>
-//           Launch demo modal
-//         </Button>
-  
-//         <Modal show={show} onHide={handleClose} animation={false}>
-//           <Modal.Header closeButton>
-//             <Modal.Title>Modal heading</Modal.Title>
-//           </Modal.Header>
-//           <Modal.Body>Woohoo, you're reading this text in a modal!</Modal.Body>
-//           <Modal.Footer>
-//             <Button variant="secondary" onClick={handleClose}>
-//               Close
-//             </Button>
-//             <Button variant="primary" onClick={handleClose}>
-//               Save Changes
-//             </Button>
-//           </Modal.Footer>
-//         </Modal>
-//       </>
-//     );
-//   }
-  
-//   render(<Example />);
+    </>
+)}

@@ -4,6 +4,7 @@ import { useState } from "react";
 import Header from './HeaderComponent';
 import Footer from './FooterComponent';
 import Home from './HomeComponent';
+import FormContact from './FormContactComponent';
 import { Routes, Route } from "react-router-dom";
 import Contact from './ContactComponent';
 import { DishDetails } from './DishDetailsComponent';
@@ -17,6 +18,7 @@ function Main() {
     <div className="App">
       <Header/>
     <Routes>
+    <Route  path="/form"  element={<FormContact/>}/>
       <Route  path="/home"  element={<Home/>} />
       <Route  path="/menu"  element={<MenuComponent/>}/>
       <Route  path="/menu/:id"  element={<DishDetails/>}/>

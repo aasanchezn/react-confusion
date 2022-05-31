@@ -34,14 +34,14 @@ function Home() {
 
     return(
         <div className="container">
-            <div className="row align-items-start">
-                <div className="col-12 col-md m-1">
+            <div className="row align-items-start" style={{outline:'1px solid red'}}>
+                <div className="col-12 col-md mb-2">
                     <RenderCard item={dishFeatured} />
                 </div>
-                <div className="col-12 col-md m-1">
+                <div className="col-12 col-md mb-2">
                     <RenderCard item={promotionFeatured} />
                 </div>
-                <div className="col-12 col-md m-1">
+                <div className="col-12 col-md mb-2">
                     <RenderCard item={leaderFeatured} />
                 </div>
             </div>
