@@ -7,13 +7,13 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 
 import { Provider } from 'react-redux';
-import store from './redux/configureStore'
+import {ConfigureStore} from './redux/configureStore'
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   
     <React.StrictMode>
-      <Provider store={store}>
+      <Provider store={ConfigureStore()}>
         <App />
       </Provider>
   </React.StrictMode>
